@@ -4,6 +4,8 @@ import argparse
 
 import re
 
+import twitter_manager
+
 tweeter_handle_regex = re.compile('(?<=^|(?<=[^a-zA-Z0-9-_\.]))@([A-Za-z]+[A-Za-z0-9]+)')
 
 
@@ -50,12 +52,16 @@ def check_if_fake_tweet(image_path):
 	text = get_text_from_image(image_path)
 	chunks = get_chunks(text)
 	handle_tweet_pairs = get_handle_tweet_pair(chunks)
-	
 
-	# print(tweeter_handles)
+	for pair in handle_tweet_pairs:
+		handle, tweet = pair
+		print(u"Searching for \n {}: {}".format(handle, tweet))
+		url = twitter_manager.search_tweet(handle, tweet)
+		if url is not None:
+			print(url)
+		else:
+			print("NOT FOUND, May wish to Check Manually!")
 
-
-	
 
 if __name__ == '__main__':
 	ap = argparse.ArgumentParser()
